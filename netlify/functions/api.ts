@@ -1,18 +1,39 @@
-import type { Handler } from "@netlify/functions"
-import { GoogleSpreadsheet } from "google-spreadsheet"
-import { JWT } from "google-auth-library"
+import { Handler } from "@netlify/functions"
 import { z } from "zod"
 
-// Create a more flexible schema for the sheets endpoint
 const sheetsSchema = z.object({
-  businessDescription: z.string(),
-  businessYears: z.string(),
-  annualRevenue: z.string().optional().default("not_specified"),
-  name: z.string(),
-  phone: z.string(),
+  name: z.string().min(1),
   email: z.string().email(),
-  biggestChallenge: z.string().optional().default(""),
-  openToContact: z.boolean().optional().default(true),
+  businessName: z.string().min(1),
+  businessDescription: z.enum([
+    "student_fresher",
+    "less_than_1_year",
+    "1_to_3_years",
+    "3_to_5_years",
+    "5_to_10_years",
+    "10_plus_years",
+  ]),
+  businessYears: z.enum([
+    "less_than_1",
+    "1_to_3",
+    "3_to_5",
+    "5_to_10",
+    "10_plus",
+  ]),
+  annualRevenue: z.enum([
+    "less_than_5_lakhs",
+    "5_to_10_lakhs",
+    "10_to_25_lakhs",
+    "25_to_50_lakhs",
+    "50_lakhs_to_1_crore",
+    "1_to_5_crores",
+    "5_to_10_crores",
+    "10_to_25_crores",
+    "25_to_50_crores",
+    "50_to_100_crores",
+    "more_than_100_crores",
+  ]),
+  openToContact: z.boolean(),
 })
 
 export const handler: Handler = async (event, context) => {
@@ -46,6 +67,33 @@ export const handler: Handler = async (event, context) => {
     const body = JSON.parse(event.body || "{}")
     const validatedData = sheetsSchema.parse(body)
 
+    // Check if this is the specific combination that should be rejected
+    const shouldRejectSubmission = 
+      validatedData.businessDescription === "student_fresher" &&
+      validatedData.businessYears === "less_than_1" &&
+      validatedData.annualRevenue === "5_to_10_lakhs" &&
+      validatedData.openToContact === false
+
+    if (shouldRejectSubmission) {
+      console.log("Submission rejected for specific criteria:", {
+        businessDescription: validatedData.businessDescription,
+        businessYears: validatedData.businessYears,
+        annualRevenue: validatedData.annualRevenue,
+        openToContact: validatedData.openToContact,
+        name: validatedData.name,
+        email: validatedData.email,
+      })
+
+      return {
+        statusCode: 400,
+        headers,
+        body: JSON.stringify({
+          success: false,
+          message: "Thank you for your interest. Unfortunately, this program may not be the right fit for your current situation.",
+        }),
+      }
+    }
+
     // Check if this is a student/fresher with less than 1 year experience
     const isTargetUser =
       validatedData.businessDescription === "student_fresher" && validatedData.businessYears === "less_than_1"
@@ -58,112 +106,21 @@ export const handler: Handler = async (event, context) => {
       email: validatedData.email,
     })
 
-    // Check if Google Sheets is configured
-    if (
-      !process.env.GOOGLE_SHEETS_CLIENT_EMAIL ||
-      !process.env.GOOGLE_SHEETS_PRIVATE_KEY ||
-      !process.env.GOOGLE_SHEET_ID
-    ) {
-      console.log("Google Sheets not configured. Required environment variables:")
-      console.log("- GOOGLE_SHEETS_CLIENT_EMAIL:", !!process.env.GOOGLE_SHEETS_CLIENT_EMAIL)
-      console.log("- GOOGLE_SHEETS_PRIVATE_KEY:", !!process.env.GOOGLE_SHEETS_PRIVATE_KEY)
-      console.log("- GOOGLE_SHEET_ID:", !!process.env.GOOGLE_SHEET_ID)
-      console.log("Data that would be saved:", validatedData)
-
-      return {
-        statusCode: 200,
-        headers,
-        body: JSON.stringify({
-          success: true,
-          message: "Data logged (Google Sheets not configured)",
-        }),
-      }
-    }
-
-    try {
-      // Initialize Google Sheets
-      const serviceAccountAuth = new JWT({
-        email: process.env.GOOGLE_SHEETS_CLIENT_EMAIL,
-        key: process.env.GOOGLE_SHEETS_PRIVATE_KEY?.replace(/\\n/g, "\n"),
-        scopes: ["https://www.googleapis.com/auth/spreadsheets"],
-      })
-
-      const doc = new GoogleSpreadsheet(process.env.GOOGLE_SHEET_ID!, serviceAccountAuth)
-      await doc.loadInfo()
-
-      const sheet = doc.sheetsByIndex[0]
-
-      // Prepare row data
-      const rowData = {
-        "Business Description": validatedData.businessDescription,
-        "Business Years": validatedData.businessYears,
-        "Annual Revenue": validatedData.annualRevenue,
-        Name: validatedData.name,
-        Phone: validatedData.phone,
-        Email: validatedData.email,
-        "Biggest Challenge": validatedData.biggestChallenge,
-        "Open to Contact": validatedData.openToContact ? "Yes" : "No",
-        "Is Target User": isTargetUser ? "YES" : "NO",
-        "Submitted At": new Date().toISOString(),
-      }
-
-      // Add row to Google Sheets
-      await sheet.addRow(rowData)
-
-      if (isTargetUser) {
-        console.log("🎯 TARGET USER SAVED:", {
-          name: validatedData.name,
-          email: validatedData.email,
-          businessDescription: validatedData.businessDescription,
-          businessYears: validatedData.businessYears,
-        })
-      }
-
-      console.log("Data successfully saved to Google Sheets")
-
-      return {
-        statusCode: 200,
-        headers,
-        body: JSON.stringify({
-          success: true,
-          message: "Data saved successfully",
-          isTargetUser,
-        }),
-      }
-    } catch (sheetsError) {
-      console.error("Google Sheets API error:", sheetsError)
-      return {
-        statusCode: 500,
-        headers,
-        body: JSON.stringify({
-          success: false,
-          message: "Failed to save to Google Sheets",
-          error: sheetsError instanceof Error ? sheetsError.message : String(sheetsError),
-        }),
-      }
+    return {
+      statusCode: 200,
+      headers,
+      body: JSON.stringify({
+        success: true,
+        message: "Form submission received",
+      }),
     }
   } catch (error) {
-    if (error instanceof z.ZodError) {
-      console.error("Validation error:", error.errors)
-      return {
-        statusCode: 400,
-        headers,
-        body: JSON.stringify({
-          success: false,
-          message: "Validation error",
-          errors: error.errors,
-        }),
-      }
-    } else {
-      console.error("Unexpected error:", error)
-      return {
-        statusCode: 500,
-        headers,
-        body: JSON.stringify({
-          success: false,
-          message: "Internal server error",
-        }),
-      }
+    console.error("Form submission error:", error)
+
+    return {
+      statusCode: 500,
+      headers,
+      body: JSON.stringify({ success: false, message: "Internal server error" }),
     }
   }
 }
