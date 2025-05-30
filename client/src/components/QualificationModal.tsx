@@ -14,6 +14,16 @@ import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import ThankYouPage from "@/components/ThankYouPage"
 
+
+declare global {
+  interface Window {
+    fbq: (action: string, event: string, data?: any) => void;
+  }
+}
+
+  const PIXEL_ID = '1573133173292370';
+
+
 const qualificationSchema = z.object({
   businessDescription: z.enum(["coach_consultant", "service_business", "working_professional", "student_fresher"], {
     required_error: "Please select what best describes you",
@@ -43,7 +53,6 @@ export function QualificationModal({ children }: QualificationModalProps) {
   const [showThankYou, setShowThankYou] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const { toast } = useToast()
-
   const {
     register,
     handleSubmit,
@@ -59,57 +68,93 @@ export function QualificationModal({ children }: QualificationModalProps) {
     },
   })
 
-  const onSubmit = async (data: QualificationFormData) => {
-    setIsSubmitting(true)
 
-    try {
-      // Check if this is a student/fresher with less than 1 year experience
-      const isTargetUser = data.businessDescription === "student_fresher" && data.businessYears === "less_than_1"
 
-      if (isTargetUser) {
-        console.log("🎯 TARGET USER DETECTED:", {
-          name: data.name,
-          email: data.email,
-          businessDescription: data.businessDescription,
-          businessYears: data.businessYears,
-        })
-      }
 
-      // Save data to Google Sheets - Updated to use Netlify Functions
-      const response = await fetch("/.netlify/functions/api", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
+
+const initializeMetaPixel = () => {
+  const script = document.createElement('script');
+  script.innerHTML = `
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window,document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '${PIXEL_ID}');
+    fbq('track', 'PageView');
+  `;
+  document.head.appendChild(script);
+};
+
+const onSubmit = async (data: QualificationFormData) => {
+  setIsSubmitting(true)
+
+  try {
+    // Check if this is a student/fresher with less than 1 year experience
+    const isTargetUser = data.businessDescription === "student_fresher" && data.businessYears === "less_than_1"
+
+    if (isTargetUser) {
+      console.log("🎯 TARGET USER DETECTED:", {
+        name: data.name,
+        email: data.email,
+        businessDescription: data.businessDescription,
+        businessYears: data.businessYears,
       })
-
-      if (!response.ok) {
-        throw new Error("Failed to save data")
-      }
-
-      const result = await response.json()
-
-      if (result.success) {
-        toast({
-          title: "Thank You!",
-          description: "Your information has been submitted successfully. We'll be in touch soon!",
-        })
-        setShowThankYou(true)
-      } else {
-        throw new Error(result.message || "Failed to save data")
-      }
-    } catch (error) {
-      console.error("Submission error:", error)
-      toast({
-        title: "Submission Failed",
-        description: "There was an error processing your form. Please try again.",
-        variant: "destructive",
-      })
-    } finally {
-      setIsSubmitting(false)
     }
+
+    // Save data to Google Sheets - Updated to use Netlify Functions
+    const response = await fetch("/.netlify/functions/api", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+
+    if (!response.ok) {
+      throw new Error("Failed to save data")
+    }
+
+    const result = await response.json()
+
+    if (result.success) {
+      // Initialize Meta Pixel and track the successful form submission
+      initializeMetaPixel();
+      
+      // Track the form submission event
+      setTimeout(() => {
+        if (typeof window !== 'undefined' && window.fbq) {
+          window.fbq('track', 'Lead', {
+            content_name: 'Qualification Form Submission',
+            content_category: 'Form',
+            value: 1,
+            currency: 'INR'
+          });
+        }
+      }, 1000);
+
+      toast({
+        title: "Thank You!",
+        description: "Your information has been submitted successfully. We'll be in touch soon!",
+      })
+      setShowThankYou(true)
+    } else {
+      throw new Error(result.message || "Failed to save data")
+    }
+  } catch (error) {
+    console.error("Submission error:", error)
+    toast({
+      title: "Submission Failed",
+      description: "There was an error processing your form. Please try again.",
+      variant: "destructive",
+    })
+  } finally {
+    setIsSubmitting(false)
   }
+}
 
   const nextStep = async () => {
     let fieldsToValidate: (keyof QualificationFormData)[] = []
