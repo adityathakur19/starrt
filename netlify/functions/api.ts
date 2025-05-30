@@ -32,7 +32,7 @@ export const handler: Handler = async (event, context) => {
     }
   }
 
-  // Only handle POST requests to /save-to-sheets
+  // Only handle POST requests
   if (event.httpMethod !== "POST") {
     return {
       statusCode: 405,
@@ -46,6 +46,13 @@ export const handler: Handler = async (event, context) => {
     const body = JSON.parse(event.body || "{}")
     const validatedData = sheetsSchema.parse(body)
 
+    // Check if this user should be excluded from saving
+    const shouldExcludeUser =
+      validatedData.businessDescription === "student_fresher" &&
+      validatedData.businessYears === "less_than_1" &&
+      validatedData.annualRevenue === "5_to_10_lakhs" &&
+      validatedData.openToContact === false
+
     // Check if this is a student/fresher with less than 1 year experience
     const isTargetUser =
       validatedData.businessDescription === "student_fresher" && validatedData.businessYears === "less_than_1"
@@ -53,10 +60,33 @@ export const handler: Handler = async (event, context) => {
     console.log("Form submission received:", {
       businessDescription: validatedData.businessDescription,
       businessYears: validatedData.businessYears,
+      annualRevenue: validatedData.annualRevenue,
+      openToContact: validatedData.openToContact,
       isTargetUser,
+      shouldExcludeUser,
       name: validatedData.name,
       email: validatedData.email,
     })
+
+    // If user should be excluded, return success without saving
+    if (shouldExcludeUser) {
+      console.log("User excluded from saving:", {
+        name: validatedData.name,
+        email: validatedData.email,
+        reason: "student_fresher + less_than_1 + 5_to_10_lakhs + not_open_to_contact",
+      })
+
+      return {
+        statusCode: 200,
+        headers,
+        body: JSON.stringify({
+          success: true,
+          message: "Thank you for your submission",
+          dataSaved: false,
+          isTargetUser,
+        }),
+      }
+    }
 
     // Check if Google Sheets is configured
     if (
@@ -76,6 +106,7 @@ export const handler: Handler = async (event, context) => {
         body: JSON.stringify({
           success: true,
           message: "Data logged (Google Sheets not configured)",
+          dataSaved: false,
         }),
       }
     }
@@ -127,6 +158,7 @@ export const handler: Handler = async (event, context) => {
         body: JSON.stringify({
           success: true,
           message: "Data saved successfully",
+          dataSaved: true,
           isTargetUser,
         }),
       }

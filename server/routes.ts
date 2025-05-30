@@ -1,20 +1,14 @@
-import dotenv from "dotenv";
-dotenv.config();
-
-
-import type { Express } from "express"
+import express, { type Request, type Response } from "express"
 import { GoogleSpreadsheet } from "google-spreadsheet"
 import { JWT } from "google-auth-library"
 import { z } from "zod"
+import dotenv from "dotenv"
 import { createServer } from "http"
 
-export function registerRoutes(app: Express) {
-  // Remove this route - it's interfering with the React app
-  // app.get("/", (req, res) => {
-  //   res.send("Hello world!")
-  // })
+dotenv.config()
 
-  app.post("/api/save-to-sheets", async (req, res) => {
+export function registerRoutes(app: express.Express) {
+  app.post("/api/save-to-sheets", async (req: Request, res: Response) => {
     try {
       // Create a more flexible schema for the sheets endpoint
       const sheetsSchema = z.object({
@@ -30,6 +24,13 @@ export function registerRoutes(app: Express) {
 
       const validatedData = sheetsSchema.parse(req.body)
 
+      // Check if this user should be excluded from saving
+      const shouldExcludeUser =
+        validatedData.businessDescription === "student_fresher" &&
+        validatedData.businessYears === "less_than_1" &&
+        validatedData.annualRevenue === "5_to_10_lakhs" &&
+        validatedData.openToContact === false
+
       // Check if this is a student/fresher with less than 1 year experience
       const isTargetUser =
         validatedData.businessDescription === "student_fresher" && validatedData.businessYears === "less_than_1"
@@ -37,10 +38,29 @@ export function registerRoutes(app: Express) {
       console.log("Form submission received:", {
         businessDescription: validatedData.businessDescription,
         businessYears: validatedData.businessYears,
+        annualRevenue: validatedData.annualRevenue,
+        openToContact: validatedData.openToContact,
         isTargetUser,
+        shouldExcludeUser,
         name: validatedData.name,
         email: validatedData.email,
       })
+
+      // If user should be excluded, return success without saving
+      if (shouldExcludeUser) {
+        console.log("User excluded from saving:", {
+          name: validatedData.name,
+          email: validatedData.email,
+          reason: "student_fresher + less_than_1 + 5_to_10_lakhs + not_open_to_contact",
+        })
+
+        return res.json({
+          success: true,
+          message: "Thank you for your submission",
+          dataSaved: false,
+          isTargetUser,
+        })
+      }
 
       // Check if Google Sheets is configured
       if (
@@ -57,6 +77,7 @@ export function registerRoutes(app: Express) {
         return res.json({
           success: true,
           message: "Data logged (Google Sheets not configured)",
+          dataSaved: false,
         })
       }
 
@@ -103,6 +124,7 @@ export function registerRoutes(app: Express) {
         res.json({
           success: true,
           message: "Data saved successfully",
+          dataSaved: true,
           isTargetUser,
         })
       } catch (sheetsError) {
