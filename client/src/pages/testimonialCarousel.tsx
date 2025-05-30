@@ -6,28 +6,23 @@ export default function TestimonialCarousel() {
   const testimonials = [
     {
       img:t1,
-      text: "Hi Taiba, One more sales closed today! Thank you so much. Your inputs have really helped me.",
+      text: "Hi Taiba, One more sales closed today! Thank you so much and lots of gratitude to you. Your inputs have really helped me. I am much more confident in pitching and closing sales on a daily basis.",
       name: "Deepak Jaswani",
     },
     {
  img:t1,  
-     text: "Thanks to you, I gained massive confidence and have consistent client calls every week!",
-      name: "Aisha Mehra",
+     text: "Thank you so much for your suggestions and guidance to find the right target market for me who can take their own decisions and will pay me for my services. This has definitely increased my sales and will keep on following this in the future as well. Thank you so much for ur help and this sales training.",
+      name: "Vidya Chittha",
     },
     {
  img:t1,
-       text: "With her help, I closed my highest ticket ever. Absolutely game-changing!",
-      name: "Rohan Gupta",
-    },
-    {
- img:t1,
-       text: "I finally feel clear and confident with my pitch. Clients are responding better than ever.",
-      name: "Priya Sharma",
-    },
-    {
- img:t1,
-       text: "Working with Taiba has made my journey so much easier. She brought in thoughtful questions and frameworks that not only provided clarity but also helped me close clients more effectively.",
+       text: "Working with Taiba has made my journey so much easier.She brought in thoughtful questions and frameworks that not only provided clarity but also helped me close clients more effectively.I'm truly grateful for how she simplified the process and made everything so much smoother.",
       name: "Khushboo Khusnay",
+    },
+    {
+ img:t1,
+       text: "Before I started working with Taiba I felt lost trying to build my Public Speaking and Communication coaching business. My personal brand was all over the place, and I had no idea how to sell my services effectively. But after just a few sessions with Taiba, everything changed. She helped me niche down, clarify my message, and structure my narrative.I always knew that I have something valuable to offer to my clients but now, I feel confident in what I offer. If you're struggling to make your mark and grow your business, having Taiba on your side is the game-changer you need.",
+      name: "Aanandika Sood",
     },
   ];
 
