@@ -324,24 +324,28 @@ export default function Landing() {
           </div>
 
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-navy mb-4 sm:mb-6">Still wondering if the call is for you?</h2>
-          <p className="text-base sm:text-lg text-navy/80 mb-8 max-w-3xl mx-auto leading-relaxed">
+          <h3 className="text-base lg:text-xl text-navy/80 mb-8 max-w-3xl mx-auto leading-relaxed">
             If you want to close more sales in your coaching or consulting business, mastering one-on-one sales is the
             best path forward. We've crafted comprehensive sales strategies to help you close more sales consistently
             within 90 days.
-          </p>
+          </h3>
 
           <QualificationModal>
             <Button className="premium-button text-base sm:text-lg md:text-xl px-6 sm:px-8 md:px-12 py-4 sm:py-6 md:py-8 scale-in delay-600 w-full sm:w-auto">
               Book Your Clarity Call Now
             </Button>
           </QualificationModal>
-
+<div className="mt-10 mb-10 h-54 ">
+ 
+</div>
           <div className="max-w-2xl mx-auto">
             <blockquote className="text-xl sm:text-2xl lg:text-3xl font-italic text-navy mb-4 leading-relaxed">
               "The secret of selling is to stop selling and start helping."
             </blockquote>
             <cite className="text-navy/70 font-medium text-base sm:text-lg">- Zig Ziglar</cite>
           </div>
+
+
         </div>
       </section>
 

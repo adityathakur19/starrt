@@ -13,27 +13,27 @@ const faqs: FAQ[] = [
   },
   {
     question: "Will it be a recorded call?",
-    answer: "Yes, the call will be recorded for your reference and review."
+    answer: "Yes, the call will be recorded on Zoom."
   },
   {
     question: "How will the call be scheduled?",
-    answer: "After booking, you'll receive a calendar link to choose your preferred time slot."
+    answer: "Calendly."
   },
   {
     question: "Will it be a phone call?",
-    answer: "It will be a video call via Zoom for better interaction and engagement."
+    answer: "No, I will be a Zoom call."
   },
   {
     question: "Do I need to be prepared with anything?",
-    answer: "Just bring your current sales challenges and be ready to take notes."
+    answer: "No, you just need to know about the current process of your sales, also you can invite people who all involved in decision making of your call."
   },
   {
     question: "What is the Refund Policy?",
-    answer: "This is a complimentary clarity call with no refund needed."
+    answer: "It’s a FREE clarity call."
   },
   {
     question: "Is there a Social Media Group for This Program?",
-    answer: "Yes, you'll get access to our exclusive LinkedIn community for ongoing support."
+    answer: "Yes, it will shared with you post the call."
   }
 ];
 
