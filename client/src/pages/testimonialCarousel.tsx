@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import t1 from "../assets/p5.png";
+import t1 from "../assets/t1.png";
+import t2 from "../assets/t2.png";
+import t3 from "../assets/t3.png";
+import t4 from "../assets/t4.png";
 
 export default function TestimonialCarousel() {
   const testimonials = [
@@ -10,17 +13,17 @@ export default function TestimonialCarousel() {
       name: "Deepak Jaswani",
     },
     {
- img:t1,  
+ img:t2,  
      text: "Thank you so much for your suggestions and guidance to find the right target market for me who can take their own decisions and will pay me for my services. This has definitely increased my sales and will keep on following this in the future as well. Thank you so much for ur help and this sales training.",
       name: "Vidya Chittha",
     },
     {
- img:t1,
+ img:t3,
        text: "Working with Taiba has made my journey so much easier.She brought in thoughtful questions and frameworks that not only provided clarity but also helped me close clients more effectively.I'm truly grateful for how she simplified the process and made everything so much smoother.",
       name: "Khushboo Khusnay",
     },
     {
- img:t1,
+ img:t4,
        text: "Before I started working with Taiba I felt lost trying to build my Public Speaking and Communication coaching business. My personal brand was all over the place, and I had no idea how to sell my services effectively. But after just a few sessions with Taiba, everything changed. She helped me niche down, clarify my message, and structure my narrative.I always knew that I have something valuable to offer to my clients but now, I feel confident in what I offer. If you're struggling to make your mark and grow your business, having Taiba on your side is the game-changer you need.",
       name: "Aanandika Sood",
     },

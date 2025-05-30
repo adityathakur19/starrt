@@ -26,9 +26,10 @@ export default function Landing() {
         <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-8 sm:gap-12 items-center max-w-6xl mx-auto">
             <div className="text-center lg:text-left order-2 lg:order-1">
-              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black hero-title mb-6 sm:mb-8 leading-tight tracking-tight slide-in-left delay-200">
-                Boost Your One-On-One Sales Conversions With Psychology Backed Strategies
-              </h2>
+<h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black mb-6 sm:mb-8 leading-tight tracking-tight slide-in-left delay-200 bg-gradient-to-r from-[hsl(var(--bright-pink))] to-[hsl(var(--deep-pink))] bg-clip-text text-transparent">
+  Boost Your One-On-One Sales Conversions With Psychology Backed Strategies
+</h2>
+
               <p className="text-base sm:text-lg md:text-xl text-black/90 mb-8 sm:mb-10 max-w-2xl mx-auto lg:mx-0 leading-relaxed font-medium slide-in-left delay-400">
                 In the one-on-one clarity call, I'll share my tried-and-tested sales strategies to help you close more
                 sales in a simple and fun way—no pressure, just easy conversations that turn into happy clients!
@@ -161,7 +162,7 @@ export default function Landing() {
           {/* CTA Button */}
           <div className="text-center mt-8 sm:mt-12 lg:mt-16">
             <QualificationModal>
-              <Button className="bg-gradient-to-r from-pink-400 to-pink-600 text-white font-semibold px-6 sm:px-10 lg:px-14 py-4 sm:py-6 lg:py-7 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 text-base sm:text-lg w-full sm:w-auto">
+              <Button className="premium-button text-base sm:text-lg md:text-xl px-6 sm:px-8 md:px-12 py-4 sm:py-6 md:py-8 scale-in delay-600 w-full sm:w-auto">
                 Book Your Clarity Call Now
               </Button>
             </QualificationModal>
@@ -210,7 +211,7 @@ export default function Landing() {
         <div className="container mx-auto px-4">
           <div className="text-center mb-8 sm:mb-12">
             <QualificationModal>
-              <Button className="bg-gradient-to-r from-pink-400 to-pink-600 text-white font-semibold px-6 sm:px-10 lg:px-14 py-4 sm:py-6 lg:py-7 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 text-base sm:text-lg w-full sm:w-auto">
+              <Button className="premium-button text-base sm:text-lg md:text-xl px-6 sm:px-8 md:px-12 py-4 sm:py-6 md:py-8 scale-in delay-600 w-full sm:w-auto">
                 Book Your Clarity Call Now
               </Button>
             </QualificationModal>
@@ -251,7 +252,7 @@ export default function Landing() {
         <div>
           <div className="text-center mb-8 sm:mb-12 px-4">
             <QualificationModal>
-              <Button className="bg-gradient-to-r from-pink-400 to-pink-600 text-white font-semibold px-6 sm:px-10 lg:px-14 py-4 sm:py-6 lg:py-7 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 text-base sm:text-lg w-full sm:w-auto">
+              <Button className="premium-button text-base sm:text-lg md:text-xl px-6 sm:px-8 md:px-12 py-4 sm:py-6 md:py-8 scale-in delay-600 w-full sm:w-auto">
                 Book Your Clarity Call Now
               </Button>
             </QualificationModal>
@@ -269,32 +270,45 @@ export default function Landing() {
         <div className="container mx-auto px-4">
           <div className="text-center mb-8 sm:mb-12">
             <QualificationModal>
-              <Button className="bg-gradient-to-r from-pink-400 to-pink-600 text-white font-semibold px-6 sm:px-10 lg:px-14 py-4 sm:py-6 lg:py-7 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 text-base sm:text-lg w-full sm:w-auto">
+              <Button className="premium-button text-base sm:text-lg md:text-xl px-6 sm:px-8 md:px-12 py-4 sm:py-6 md:py-8 scale-in delay-600 w-full sm:w-auto">
                 Book Your Clarity Call Now
               </Button>
             </QualificationModal>
           </div>
 
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-navy text-center mb-12 sm:mb-16">About The Coach</h2>
-          <div className="grid lg:grid-cols-2 gap-8 sm:gap-12 items-center max-w-6xl mx-auto">
-            <div className="order-2 lg:order-1">
-              <h3 className="text-2xl sm:text-3xl font-bold text-pink-700 mb-4 sm:mb-6 text-center lg:text-left">Hi, I'm Taiba Mahmood!</h3>
-              <p className="text-navy leading-relaxed text-base sm:text-lg text-center lg:text-left">
-                For the past 4 years, I've helped coaches like you close more sales by using my Psychology-backed
-                strategies. I believe selling is serving, and it should feel natural and fun. My mission is to make
-                sales effortless by teaching simple principles of human psychology. With my strategies, you'll overcome
-                limiting beliefs related to sales, and gain the step-by-step skillset to close sales calls confidently.
-                Ready to boost your sales conversions? Let's make sales simple, easy and fun for you!
-              </p>
-            </div>
-            <div className="text-center order-1 lg:order-2">
-              <img
-                src={Img || "/placeholder.svg"}
-                alt="Professional business coach Taiba Mahmood portrait"
-                className="rounded-2xl shadow-2xl w-64 sm:w-72 md:w-80 h-72 sm:h-80 md:h-96 object-cover mx-auto"
-              />
-            </div>
-          </div>
+<div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 items-center max-w-6xl mx-auto px-4">
+  {/* Content Left on Desktop */}
+  <div className="order-2 lg:order-1 text-center lg:text-left">
+    <h3 className="text-2xl sm:text-3xl font-bold text-pink-700 mb-4 sm:mb-6">
+      Hi, I'm Taiba Mahmood!
+    </h3>
+    <p className="text-navy leading-relaxed text-base sm:text-lg">
+      For the past 4 years, I've helped coaches like you close more sales by using my Psychology-backed
+      strategies. I believe selling is serving, and it should feel natural and fun. My mission is to make
+      sales effortless by teaching simple principles of human psychology. With my strategies, you'll overcome
+      limiting beliefs related to sales, and gain the step-by-step skillset to close sales calls confidently.
+      Ready to boost your sales conversions? Let's make sales simple, easy and fun for you!
+    </p>
+  </div>
+
+  {/* Image Right on Desktop */}
+  <div className="order-1 lg:order-2 flex justify-center">
+    <div className="premium-card floating-animation slide-in-right delay-300 w-56 sm:w-64 md:w-72 lg:w-80 h-72 sm:h-80 md:h-88 lg:h-96">
+      <img
+        src={Img || "/placeholder.svg"}
+        alt="Professional business coach Taiba Mahmood portrait"
+        className="w-full h-full object-cover rounded-[28px]"
+      />
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
         </div>
       </section>
 
@@ -303,7 +317,7 @@ export default function Landing() {
         <div className="container mx-auto px-4 text-center">
           <div className="text-center mb-8 sm:mb-12">
             <QualificationModal>
-              <Button className="bg-gradient-to-r from-pink-400 to-pink-600 text-white font-semibold px-6 sm:px-10 lg:px-14 py-4 sm:py-6 lg:py-7 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 text-base sm:text-lg w-full sm:w-auto">
+              <Button className="premium-button text-base sm:text-lg md:text-xl px-6 sm:px-8 md:px-12 py-4 sm:py-6 md:py-8 scale-in delay-600 w-full sm:w-auto">
                 Book Your Clarity Call Now
               </Button>
             </QualificationModal>
@@ -317,7 +331,7 @@ export default function Landing() {
           </p>
 
           <QualificationModal>
-            <Button className="bg-gradient-to-r from-pink-400 to-pink-600 text-white font-semibold px-6 sm:px-10 lg:px-14 py-4 sm:py-6 lg:py-7 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 text-base sm:text-lg w-full sm:w-auto mb-8 sm:mb-12">
+            <Button className="premium-button text-base sm:text-lg md:text-xl px-6 sm:px-8 md:px-12 py-4 sm:py-6 md:py-8 scale-in delay-600 w-full sm:w-auto">
               Book Your Clarity Call Now
             </Button>
           </QualificationModal>
@@ -340,7 +354,7 @@ export default function Landing() {
 
             <div className="text-center mt-8 sm:mt-12">
               <QualificationModal>
-                <Button className="bg-gradient-to-r from-pink-400 to-pink-600 text-white font-semibold px-6 sm:px-10 lg:px-14 py-4 sm:py-6 lg:py-7 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 text-base sm:text-lg w-full sm:w-auto">
+                <Button className="premium-button text-base sm:text-lg md:text-xl px-6 sm:px-8 md:px-12 py-4 sm:py-6 md:py-8 scale-in delay-600 w-full sm:w-auto">
                   Book Your Clarity Call Now
                 </Button>
               </QualificationModal>
