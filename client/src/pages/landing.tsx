@@ -121,7 +121,7 @@ export default function Landing() {
           </div>
 
           {/* Desktop Layout */}
-          <div className="hidden lg:block relative w-full h-[480px] flex items-center justify-center">
+          <div className="hidden lg:flex relative w-full h-[480px] items-center justify-center">
             <div className="w-64 md:w-72 lg:w-80 h-64 md:h-72 lg:h-80 rounded-full z-10 relative">
               <img
                 src={p1 || "/placeholder.svg"}
